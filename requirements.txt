@@ -1,8 +1,14 @@
-numpy
-pandas
+dotenv
 
 # News Ingestion
 gnews
 selenium
 newspaper3k
 lxml_html_clean
+# News analysis
+groq
+
+
+# Data interaction
+numpy
+pandas
