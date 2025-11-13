@@ -65,8 +65,46 @@ class ViT5Summarizer:
         
         return summary
 
+def summarize_for_file(
+    filepath = r'data\bronze\news\news_credit_suisse.json',
+    output_path = r'data\bronze\news\summarized_credit_suisse.json'
+):
+    import pandas as pd
+    summarizer = ViT5Summarizer()
+    dataset = pd.read_json(filepath)
+    content = dataset['content']
+    summarized_content = pd.Series('', index=content.index, dtype='object')
+    count = 0
+
+    for idx, news in enumerate(content):
+        if idx < 25:
+            continue
+
+        print(f'Processing the {idx}\'th news')
+        summarized_content[idx] = summarizer.summarize_one(news)
+        count=count+1
+        # break
+    
+    dataset['summarision'] = summarized_content
+    print(f'Đã tóm tắt {count} bào báo')
+    
+    
+    dataset.to_json(
+        r'..\data\bronze\news\summarized_credit_suisse.json',
+        orient='records',
+        indent=4,
+        force_ascii=False,
+        #encoding='utf-8'  # Thêm cái này để đảm bảo file lưu chuẩn UTF-8
+    )
+
+# summarize_for_file()
+
+
+
+
+
 # --- Test nhanh nếu chạy trực tiếp file này ---
-if __name__ == "__main__":
+def main():
     summarizer = ViT5Summarizer()
     test_text = "VietAI là tổ chức phi lợi nhuận với sứ mệnh ươm mầm tài năng về trí tuệ nhân tạo."
     print("Tóm tắt thử:", summarizer.summarize_one(test_text))
